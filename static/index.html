@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WikiScrap</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Wikipedia Article Scrapper</h1>
+    </header>
+    <div>
+        <label for="wikipediaArticle">Wikipedia Article URL:</label>
+        <input id="wikipediaArticle" name="wikipediaArticle" type="text">
+        <button onclick='submitURL()' type="submit">Try!</button>
+    </div>
+    <div id="articleTitleContainer"></div>
+    <div id="articlesContainer"></div>
+    <script src="script.js"></script>
+    <footer>
+        <label for="pageNumber">Page: </label>
+        <button for="pageNumber" onclick='changePage(false)' type="submit">&lt;</button>
+        <input id="pageNumber" name="pageNumber" type="text" value="1">
+        <button for="pageNumber" onclick='changePage(true)' type="submit">&gt;</button>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,58 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h3 {
+    text-align: center;
+}
+
+input[type="number"] {
+    margin: 5px;
+    width: 50px;
+}
+
+table {
+    border-collapse: collapse;
+    margin: 20px;
+    text-align: center;
+}
+
+td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    width: 40px;
+}
+
+th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    background-color: #f2f2f2;
+    border: 1px solid #ddd;
+}
+
+#matrixContainer div {
+    margin: 10px;
+}
+
+.input {
+    margin: 5px;
+    width: 50px;
+}
+
+#mw-page-title-main {
+    text-align: center;
+}
+
+#pageNumber {
+    text-align: center;
+    width: 15px;
+}
+
+footer {
+    position: fixed;
+    bottom: 8px;
+ }

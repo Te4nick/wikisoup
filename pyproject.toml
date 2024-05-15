@@ -1,0 +1,22 @@
+[project]
+name="wikisoup"
+version="0.0.1"
+license = {text = "MIT License"}
+requires-python = "~= 3.10"
+dependencies=[
+    "django~=5.0.6",
+    "djangorestframework~=3.15.1",
+    "drf-spectacular~=0.27.2",
+    "beautifulsoup4~=4.12.3",
+    "django-cors-headers~=4.3.1",
+    "requests~=2.31.0",
+    # "apscheduler~=3.10.4",
+    # "django-rest-enumfield~=0.2.0",
+]
+
+[build-system]
+requires = ["setuptools>=68.2.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = []
