@@ -16,13 +16,10 @@
         <button onclick='submitURL()' type="submit">Try!</button>
     </div>
     <div id="articleTitleContainer"></div>
-    <div id="articlesContainer"></div>
     <script src="script.js"></script>
     <footer>
-        <label for="pageNumber">Page: </label>
-        <button for="pageNumber" onclick='changePage(false)' type="submit">&lt;</button>
-        <input id="pageNumber" name="pageNumber" type="text" value="1">
-        <button for="pageNumber" onclick='changePage(true)' type="submit">&gt;</button>
+        <div id="historyFooter"></div>
+        <button onclick='setHistoryFooter()' type="submit">History</button>
     </footer>
 </body>
 </html>

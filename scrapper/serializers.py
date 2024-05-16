@@ -23,6 +23,7 @@ class ArticleSerializer(WikipediaURLSerializer, UUIDSerializer):
 
 class PageSerializer(serializers.Serializer):
     total = serializers.IntegerField(min_value=0, required=True)
+    page_size = serializers.IntegerField(min_value=0, required=True)
     articles = ArticleSerializer(required=True, many=True)
 
 

@@ -14,7 +14,7 @@ class WikiScrapService:
         articles = list(Article.objects.all())
 
         if page == 1 and not articles:
-            return Page(0)
+            return Page(0, max_entries)
 
         try:
             for i in range((page-1) * max_entries, page * max_entries):
@@ -25,7 +25,7 @@ class WikiScrapService:
         if not out:
             return None
 
-        return Page(total=len(articles), articles=out)
+        return Page(total=len(articles), page_size=max_entries, articles=out)
 
     @staticmethod
     def add_article(url: str) -> Article:
@@ -114,5 +114,6 @@ class WikiScrapService:
             element.prettify(formatter='html')
             .replace('\n', '')
             .replace('\"', "'")
-            .replace("'/wiki/", cls._get_url_prefix(url))
+            .replace("'/wiki/", "'"+cls._get_url_prefix(url))
+            .replace("//upload", "https://upload")
         )

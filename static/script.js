@@ -1,10 +1,5 @@
 const api_addr = "http://127.0.0.1:8000/"
 const api_article_url = api_addr + "article/url"
-
-const matrixSizeContainer = document.getElementById('matrixSizeContainer')
-const matrixContainer = document.getElementById('matrixContainer')
-const operandContainer = document.getElementById('operandContainer')
-
 const reURL = new RegExp("^https://..\.wikipedia.org/wiki/.+")
 
 async function apiFetchJSON(data, path, method) {
@@ -17,6 +12,7 @@ async function apiFetchJSON(data, path, method) {
     if (data != null) req.body = JSON.stringify(data);
 
     const response = await fetch(path, req);
+    if (response.headers.get("content-length") == 0) return response
     return await response.json();
 }
 
@@ -36,23 +32,23 @@ function inputClamp(elementId, min, max) {
 
 
 function submitURL() {
-    
     const url = document.getElementById('wikipediaArticle').value
     if (!url.match(reURL)) {
         alert("URL must be the WIKIPEDIA ARTICLE.\nExample: https://en.wikipedia.org/wiki/Python_(programming_language)")
         return
     }
-
     apiFetchJSON({"url": url}, api_article_url, 'POST')
-    .then(data => setArticleTitleInfobox(data.id))
+    .then(data => {
+        setArticlesPage()
+        setArticleTitleInfobox(data.id)()
+    })
     .catch(error => console.error('Error:', error));
 }
 
 function deleteArticle(articleId) {
     return function () {
         apiFetchJSON(null, api_article_url + "?id=" + articleId, 'Delete')
-            .then(setArticlesPage())
-            .catch(setArticlesPage());
+        setArticlesPage()
     }
 }
 
@@ -61,7 +57,7 @@ function setArticleTitleInfobox(articleId) {
         apiFetchJSON(null, api_article_element(articleId), 'GET')
             .then(data => document.getElementById("articleTitleContainer").innerHTML = data.html)
             .catch(error => console.error('Error:', error));
-        apiFetchJSON({"class_string": "infobox vevent"}, api_article_element(articleId), 'POST')
+        apiFetchJSON({"class_string": "infobox"}, api_article_element(articleId), 'POST')
             .then(data => document.getElementById("articleTitleContainer").innerHTML += data.html)
             .catch(error => console.error('Error:', error));
     }
@@ -73,8 +69,7 @@ function setArticleTitleInfobox(articleId) {
 // !!!
 var currentPageNumber = 1
 var totalArticles = 0
-const articlesContainer = document.getElementById('articlesContainer')
-const pageNumberInput = document.getElementById("pageNumber")
+var pageSize = 0
 
 function changePage(next) {
     const pageNumberInput = document.getElementById("pageNumber")
@@ -84,23 +79,43 @@ function changePage(next) {
     }
     if (!next) {
         if (pageNumber == 1) return
-        pageNumberInput.value = pageNumber - 1
+        currentPageNumber = pageNumber - 1
+        pageNumberInput.value = currentPageNumber
         setArticlesPage()
         return
     } else {
-        if (10*pageNumber >= totalArticles) return
-        pageNumberInput.value = pageNumber + 1
+        if (pageSize*pageNumber >= totalArticles) return
+        currentPageNumber = pageNumber + 1
+        pageNumberInput.value = currentPageNumber
         setArticlesPage()
         return
     }
 }
 
+function setHistoryFooter() {
+    const historyFooter = document.getElementById("historyFooter")
+    const articlesContainer = document.getElementById("articlesContainer")
+    if (!articlesContainer) {
+        historyFooter.innerHTML = '' +
+        '<div id="articlesContainer"></div>' +
+        '<label for="pageNumber">Page: </label>' +
+        '<button for="pageNumber" onclick="changePage(false)" type="submit">&lt;</button>' +
+        '<input id="pageNumber" name="pageNumber" type="text" value="1" disabled>' +
+        '<button for="pageNumber" onclick="changePage(true)" type="submit">&gt;</button>'
+        setArticlesPage()
+    } else {
+        historyFooter.innerHTML = ''
+    }
+}
+
 function setArticlesPage() {
-    let newPageNumber = Number(document.getElementById("pageNumber").value)
-    apiFetchJSON(null, api_article_url + "?page=" + newPageNumber, "GET")
+    const articlesContainer = document.getElementById("articlesContainer")
+    if (!articlesContainer) return
+    apiFetchJSON(null, api_article_url + "?page=" + currentPageNumber, "GET")
     .then(data => {
         articlesContainer.innerHTML = ''; // Clear previous page
         totalArticles = Number(data.total)
+        pageSize = Number(data.page_size)
         const table = document.createElement('table');
         const tbody = document.createElement('tbody');
     
@@ -124,9 +139,8 @@ function setArticlesPage() {
     
         table.appendChild(tbody);
         articlesContainer.appendChild(table);
-        currentPageNumber = newPageNumber
     })
     
 }
 
-window.onload = setArticlesPage
+// window.onload = setArticlesPage
