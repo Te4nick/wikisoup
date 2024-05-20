@@ -56,7 +56,7 @@ class ScrapViewSet(ViewSet):
         request=WikipediaURLSerializer,
         responses={
             status.HTTP_201_CREATED: ArticleSerializer,
-            status.HTTP_400_BAD_REQUEST: ValidationErrorSerializer,
+            status.HTTP_404_NOT_FOUND: ValidationErrorSerializer,
             status.HTTP_422_UNPROCESSABLE_ENTITY: ValidationErrorSerializer,
         },
         auth=False,
@@ -74,7 +74,7 @@ class ScrapViewSet(ViewSet):
             article = self.scrap_service.add_article(serializer.validated_data["url"])
         except ConnectionError as conn_e:
             return Response(
-                status=status.HTTP_400_BAD_REQUEST,
+                status=status.HTTP_404_NOT_FOUND,
                 data=ValidationErrorSerializer({"errors": {"connection": list(conn_e.args)}}).data,
             )
 

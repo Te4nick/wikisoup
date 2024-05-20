@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import re
 from uuid import UUID
 
-from scrapper.models import Page, Article
+from ..models import Page, Article
 
 
 class WikiScrapService:
