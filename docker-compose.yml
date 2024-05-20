@@ -1,0 +1,44 @@
+version: "3.9"
+
+services:
+  backend:
+    container_name: backend
+    build:
+      context: .
+      dockerfile: docker/backend/Dockerfile
+    env_file: docker/backend/.env
+    volumes:
+      - .db_data:/app/db_data
+    expose:
+      - 8000
+    networks:
+      [ wikisoup ]
+
+  webserver:
+    container_name: webserver
+    build:
+      context: .
+      dockerfile: docker/webserver/Dockerfile
+    ports:
+      - "80:80"
+    networks:
+      [ wikisoup ]
+    depends_on:
+      - backend
+
+  frontend:
+    container_name: frontend
+    image: nginx:alpine3.19-slim
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+    ports:
+      - "3000:80"
+    networks:
+      [ wikisoup ]
+    depends_on:
+      - backend
+      - webserver
+
+networks:
+  wikisoup:
+    name: wikisoup
