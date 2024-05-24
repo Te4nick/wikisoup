@@ -6,7 +6,6 @@ services:
     build:
       context: .
       dockerfile: docker/backend/Dockerfile
-    env_file: docker/backend/.env
     volumes:
       - .db_data:/app/db_data
     expose:
@@ -19,8 +18,8 @@ services:
     build:
       context: .
       dockerfile: docker/webserver/Dockerfile
-    ports:
-      - "80:80"
+    expose:
+      - 80
     networks:
       [ wikisoup ]
     depends_on:
@@ -28,11 +27,13 @@ services:
 
   frontend:
     container_name: frontend
-    image: nginx:alpine3.19-slim
+    build:
+      context: .
+      dockerfile: docker/frontend/Dockerfile
     volumes:
-      - ./frontend:/usr/share/nginx/html
+      - ./frontend:/var/www/matrix.com/static
     ports:
-      - "3000:80"
+      - "80:80"
     networks:
       [ wikisoup ]
     depends_on:

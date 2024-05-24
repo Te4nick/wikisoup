@@ -3,16 +3,9 @@
 ## Run in Docker Compose
 
 - Clone repository
-- Copy docker/backend/.env.example to docker/backend/.env 
-  and change values if needed ($HOST and $PORT entries are tied to docker-compose.yml,
-  so you need to also modify compose file, $DEBUG stands for django DEBUG mode, 
-  supported values are 0 and 1). 
-  ```shell
-  $ cp docker/backend/.env.example docker/backend/.env
-  ```
 - Run Docker Compose
   ```shell
-  $ docker compose -p "idanpow" up -d
+  $ docker compose -p "wikisoup" up -d
   ```
 
 ## Run locally
@@ -33,11 +26,6 @@
 - Install dependencies
   ```shell
   $ pip install ./backend
-  ```
-- Copy docker/backend/.env.example to backend/.env 
-  and change values if needed (see `Run in Docker Compose`). 
-  ```shell
-  $ cp docker/backend/.env.example backend/.env
   ```
 - Make Django migrations
   ```shell

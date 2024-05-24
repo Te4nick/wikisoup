@@ -1,4 +1,4 @@
-const api_addr = "http://127.0.0.1/"
+const api_addr = "/"
 const api_article_url = api_addr + "article/url"
 const reURL = new RegExp("^https://..\.wikipedia.org/wiki/.+")
 
